@@ -1,0 +1,13 @@
+{
+  "name": "stars-shop-bot",
+  "version": "1.0.0",
+  "description": "Telegram-бот для мини-аппа Stars Shop: открывает магазин, принимает заказ и фото чека, пересылает на проверку админу",
+  "main": "bot.js",
+  "scripts": {
+    "start": "node bot.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "grammy": "^1.21.1"
+  }
+}

@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Stars Shop</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{
+  --bg:#0d0d14;
+  --bg2:#16161f;
+  --bg3:#1e1e2a;
+  --text:#f0f0f8;
+  --hint:#6b6b85;
+  --accent:#9d6eff;
+  --accent2:#6c35e0;
+  --gold:#fcc84a;
+  --gold2:#e8a700;
+  --green:#3ecf8e;
+  --red:#f06b6b;
+  --border:rgba(255,255,255,0.07);
+}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,'SF Pro Display','Segoe UI',sans-serif;min-height:100vh;overflow-x:hidden}
+
+/* NAV */
+.nav{display:flex;background:rgba(13,13,20,0.95);border-top:1px solid var(--border);position:fixed;bottom:0;left:0;right:0;z-index:100;backdrop-filter:blur(12px);padding-bottom:env(safe-area-inset-bottom)}
+.nav-btn{flex:1;padding:10px 8px 8px;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;border:none;background:none;color:var(--hint);font-size:10px;font-weight:500;transition:color .2s;position:relative}
+.nav-btn svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;transition:transform .2s}
+.nav-btn.active{color:var(--accent)}
+.nav-btn.active svg{transform:scale(1.1)}
+.nav-dot{width:4px;height:4px;border-radius:50%;background:var(--accent);position:absolute;top:6px;right:calc(50% - 14px);display:none}
+.nav-btn.active .nav-dot{display:block}
+
+/* SCREENS */
+.screen{display:none;padding:0 0 90px}
+.screen.active{display:block}
+
+/* HERO */
+.hero{padding:28px 20px 20px;position:relative;overflow:hidden}
+.hero-glow{position:absolute;top:-60px;left:50%;transform:translateX(-50%);width:280px;height:280px;background:radial-gradient(circle,rgba(157,110,255,0.18) 0%,transparent 70%);pointer-events:none}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(157,110,255,0.12);border:1px solid rgba(157,110,255,0.25);border-radius:20px;padding:5px 12px;font-size:12px;color:var(--accent);font-weight:500;margin-bottom:14px}
+.hero h1{font-size:26px;font-weight:800;letter-spacing:-.5px;line-height:1.2}
+.hero h1 span{background:linear-gradient(135deg,#fcc84a,#ff8c42);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{font-size:14px;color:var(--hint);margin-top:8px;line-height:1.5}
+
+/* SECTION LABEL */
+.section-label{font-size:11px;font-weight:700;letter-spacing:.1em;color:var(--hint);text-transform:uppercase;padding:0 20px;margin:20px 0 10px}
+
+/* PACKAGES */
+.packages{padding:0 16px;display:flex;flex-direction:column;gap:8px}
+.pkg-card{background:var(--bg2);border-radius:18px;padding:16px;display:flex;align-items:center;gap:14px;cursor:pointer;border:1.5px solid var(--border);transition:all .2s;position:relative;overflow:hidden}
+.pkg-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(157,110,255,0.06),transparent);opacity:0;transition:opacity .2s}
+.pkg-card.selected{border-color:var(--accent);background:rgba(157,110,255,0.08)}
+.pkg-card.selected::before{opacity:1}
+.pkg-card:active{transform:scale(0.98)}
+.pkg-icon{width:54px;height:54px;border-radius:16px;background:linear-gradient(135deg,rgba(252,200,74,0.15),rgba(255,140,66,0.1));display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0;border:1px solid rgba(252,200,74,0.2)}
+.pkg-info{flex:1}
+.pkg-count{font-size:17px;font-weight:700;display:flex;align-items:center;gap:6px}
+.pkg-count .star-color{color:var(--gold)}
+.pkg-price{font-size:13px;color:var(--hint);margin-top:3px;font-weight:500}
+.pkg-badge{font-size:11px;font-weight:700;padding:4px 9px;border-radius:8px;flex-shrink:0}
+.pkg-badge.hot{background:rgba(252,200,74,0.15);color:var(--gold);border:1px solid rgba(252,200,74,0.25)}
+.pkg-badge.sale{background:rgba(62,207,142,0.12);color:var(--green);border:1px solid rgba(62,207,142,0.2)}
+.pkg-radio{width:22px;height:22px;border-radius:50%;border:2px solid rgba(255,255,255,0.15);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.pkg-card.selected .pkg-radio{border-color:var(--accent);background:var(--accent)}
+.pkg-card.selected .pkg-radio::after{content:'';width:8px;height:8px;background:#fff;border-radius:50%}
+
+/* BUY BUTTON */
+.buy-wrap{position:fixed;bottom:65px;left:0;right:0;padding:10px 16px;background:linear-gradient(to top,var(--bg) 55%,transparent);z-index:50}
+.buy-btn{width:100%;padding:16px;background:linear-gradient(135deg,var(--accent2),var(--accent));border:none;border-radius:16px;color:#fff;font-size:16px;font-weight:700;cursor:pointer;transition:all .15s;letter-spacing:-.1px}
+.buy-btn:active{transform:scale(0.97);opacity:.9}
+.buy-btn:disabled{opacity:.35;pointer-events:none}
+
+/* PAY SCREEN */
+.pay-screen-wrap{padding:0 16px}
+.pay-methods{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
+.pay-method{background:var(--bg2);border-radius:16px;padding:14px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;border:1.5px solid var(--border);transition:all .2s}
+.pay-method.selected{border-color:var(--accent);background:rgba(157,110,255,0.07)}
+.pay-method:active{transform:scale(0.98)}
+.pay-icon-wrap{width:42px;height:42px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.pay-name{font-size:15px;font-weight:600}
+.pay-sub{font-size:12px;color:var(--hint);margin-top:2px}
+.pay-check{margin-left:auto;width:22px;height:22px;border-radius:50%;border:2px solid rgba(255,255,255,0.15);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.pay-method.selected .pay-check{border-color:var(--accent);background:var(--accent)}
+.pay-method.selected .pay-check::after{content:'';width:8px;height:8px;background:#fff;border-radius:50%}
+
+/* RECEIPT */
+.receipt-wrap{padding:0 16px}
+.req-card{background:var(--bg2);border-radius:18px;padding:18px;margin-bottom:12px;border:1px solid var(--border)}
+.req-card .req-title{font-size:12px;font-weight:700;letter-spacing:.06em;color:var(--hint);text-transform:uppercase;margin-bottom:14px}
+.req-row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--border)}
+.req-row:last-child{border-bottom:none}
+.req-label{font-size:13px;color:var(--hint)}
+.req-value{font-size:14px;font-weight:600;text-align:right}
+.req-value.highlight{color:var(--gold)}
+.req-value.copy-btn{color:var(--accent);cursor:pointer;text-decoration:underline;text-underline-offset:2px}
+
+.upload-area{background:var(--bg2);border:2px dashed rgba(157,110,255,0.3);border-radius:18px;padding:28px 20px;text-align:center;cursor:pointer;transition:all .2s;margin-bottom:8px;position:relative;overflow:hidden}
+.upload-area:active{border-color:var(--accent);background:rgba(157,110,255,0.06)}
+.upload-area.has-photo{border-style:solid;border-color:var(--accent)}
+.upload-icon{font-size:36px;margin-bottom:10px}
+.upload-title{font-size:15px;font-weight:600;margin-bottom:4px}
+.upload-sub{font-size:13px;color:var(--hint)}
+.upload-preview{width:100%;max-height:220px;object-fit:cover;border-radius:12px;display:none}
+.upload-input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.photo-remove{display:none;margin-top:10px;background:rgba(240,107,107,0.15);border:1px solid rgba(240,107,107,0.3);color:var(--red);border-radius:10px;padding:8px 16px;font-size:13px;font-weight:600;cursor:pointer;width:100%}
+
+/* ORDER SUMMARY */
+.order-summary{background:linear-gradient(135deg,rgba(157,110,255,0.1),rgba(108,53,224,0.08));border:1px solid rgba(157,110,255,0.2);border-radius:16px;padding:16px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between}
+.order-summary .os-stars{font-size:22px;font-weight:800}
+.order-summary .os-stars span{color:var(--gold)}
+.order-summary .os-price{font-size:14px;color:var(--hint);margin-top:3px}
+.order-summary .os-badge{background:rgba(157,110,255,0.2);border-radius:10px;padding:8px 14px;font-size:13px;font-weight:700;color:var(--accent)}
+
+/* STEPS */
+.steps-wrap{padding:16px 20px 4px;display:flex;gap:5px}
+.step-bar{height:3px;flex:1;border-radius:2px;background:rgba(255,255,255,0.08);transition:background .3s}
+.step-bar.active{background:linear-gradient(90deg,var(--accent2),var(--accent))}
+
+/* BACK */
+.back-btn{background:none;border:none;color:var(--accent);font-size:14px;font-weight:600;cursor:pointer;padding:14px 20px 6px;display:flex;align-items:center;gap:5px}
+
+/* PROFILE */
+.profile-wrap{padding:0 16px}
+.profile-hero{background:var(--bg2);border-radius:20px;padding:22px;text-align:center;margin-bottom:12px;border:1px solid var(--border);position:relative;overflow:hidden}
+.profile-hero::before{content:'';position:absolute;top:-40px;left:50%;transform:translateX(-50%);width:200px;height:200px;background:radial-gradient(circle,rgba(157,110,255,0.15) 0%,transparent 70%);pointer-events:none}
+.avatar{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--accent2),var(--accent));display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:800;margin:0 auto 12px;border:3px solid rgba(157,110,255,0.3)}
+.profile-name{font-size:18px;font-weight:700}
+.profile-username{font-size:13px;color:var(--hint);margin-top:4px}
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.stat-card{background:var(--bg2);border-radius:16px;padding:16px;text-align:center;border:1px solid var(--border)}
+.stat-val{font-size:22px;font-weight:800}
+.stat-val.gold{color:var(--gold)}
+.stat-lbl{font-size:12px;color:var(--hint);margin-top:4px}
+
+/* ORDERS */
+.orders-wrap{padding:0 16px}
+.order-card{background:var(--bg2);border-radius:16px;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;border:1px solid var(--border)}
+.order-left .order-stars{font-size:16px;font-weight:700}
+.order-left .order-stars span{color:var(--gold)}
+.order-left .order-date{font-size:12px;color:var(--hint);margin-top:3px}
+.order-price{font-size:13px;color:var(--hint);margin-bottom:5px;text-align:right}
+.badge{font-size:11px;font-weight:700;padding:4px 10px;border-radius:8px}
+.badge.done{background:rgba(62,207,142,0.12);color:var(--green)}
+.badge.pending{background:rgba(252,200,74,0.12);color:var(--gold)}
+.badge.checking{background:rgba(157,110,255,0.12);color:var(--accent)}
+.badge.rejected{background:rgba(240,107,107,0.12);color:var(--red)}
+
+/* EMPTY */
+.empty{text-align:center;padding:50px 20px;color:var(--hint);font-size:14px}
+.empty-icon{font-size:52px;margin-bottom:14px}
+.empty-title{font-size:16px;font-weight:600;color:var(--text);margin-bottom:6px}
+
+/* TOAST */
+.toast{position:fixed;top:16px;left:50%;transform:translateX(-50%) translateY(-80px);background:var(--bg3);color:var(--text);padding:12px 20px;border-radius:14px;font-size:14px;font-weight:500;z-index:999;transition:transform .35s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;border:1px solid var(--border);box-shadow:0 8px 32px rgba(0,0,0,.4)}
+.toast.show{transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <button class="nav-btn active" onclick="showScreen('shop')" id="nav-shop">
+    <div class="nav-dot"></div>
+    <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+    Купить
+  </button>
+  <button class="nav-btn" onclick="showScreen('profile')" id="nav-profile">
+    <div class="nav-dot"></div>
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+    Профиль
+  </button>
+  <button class="nav-btn" onclick="showScreen('orders')" id="nav-orders">
+    <div class="nav-dot"></div>
+    <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 9h8M8 13h5"/></svg>
+    Заказы
+  </button>
+</nav>
+
+<!-- SHOP -->
+<div class="screen active" id="screen-shop">
+
+  <!-- STEP 1: пакет -->
+  <div id="step-pkg">
+    <div class="hero">
+      <div class="hero-glow"></div>
+      <div class="hero-badge">✨ Официальные Telegram Stars</div>
+      <h1>Купи <span>звёзды</span><br>дёшево и быстро</h1>
+      <p>Моментальная отправка · Лучшие цены в UZS</p>
+    </div>
+    <div class="section-label">Выбери пакет</div>
+    <div class="packages" id="pkg-list"></div>
+    <div style="height:130px"></div>
+    <div class="buy-wrap">
+      <button class="buy-btn" id="btn-next-pay" onclick="goToPayStep()" disabled>Выбери пакет</button>
+    </div>
+  </div>
+
+  <!-- STEP 2: оплата -->
+  <div id="step-pay" style="display:none">
+    <button class="back-btn" onclick="goBack('step-pkg','step-pay')">← Назад</button>
+    <div class="steps-wrap"><div class="step-bar active"></div><div class="step-bar active"></div><div class="step-bar"></div></div>
+    <div class="section-label">Способ оплаты</div>
+    <div class="pay-screen-wrap">
+      <div class="pay-methods">
+        <div class="pay-method selected" onclick="selPay(this,'card')">
+          <div class="pay-icon-wrap" style="background:rgba(62,207,142,0.12)">💳</div>
+          <div><div class="pay-name">Click / Payme</div><div class="pay-sub">Visa, UzCard, Humo</div></div>
+          <div class="pay-check"></div>
+        </div>
+        <div class="pay-method" onclick="selPay(this,'transfer')">
+          <div class="pay-icon-wrap" style="background:rgba(252,200,74,0.12)">🏦</div>
+          <div><div class="pay-name">Перевод на карту</div><div class="pay-sub">Любой банк Узбекистана</div></div>
+          <div class="pay-check"></div>
+        </div>
+      </div>
+    </div>
+    <div class="buy-wrap">
+      <button class="buy-btn" onclick="goToReceiptStep()">Далее — ввести чек →</button>
+    </div>
+  </div>
+
+  <!-- STEP 3: реквизиты + фото чека -->
+  <div id="step-receipt" style="display:none">
+    <button class="back-btn" onclick="goBack('step-pay','step-receipt')">← Назад</button>
+    <div class="steps-wrap"><div class="step-bar active"></div><div class="step-bar active"></div><div class="step-bar active"></div></div>
+
+    <div class="receipt-wrap">
+      <div class="order-summary" id="order-summary-block"></div>
+
+      <div class="req-card" id="requisites-card"></div>
+
+      <div class="section-label" style="padding:0;margin:16px 0 10px">Прикрепи чек оплаты</div>
+
+      <div class="upload-area" id="upload-area" onclick="triggerUpload()">
+        <input type="file" accept="image/*" class="upload-input" id="photo-input" onchange="handlePhoto(this)">
+        <img class="upload-preview" id="photo-preview">
+        <div id="upload-placeholder">
+          <div class="upload-icon">📷</div>
+          <div class="upload-title">Прикрепить скриншот</div>
+          <div class="upload-sub">Нажми чтобы выбрать фото чека</div>
+        </div>
+      </div>
+      <button class="photo-remove" id="photo-remove-btn" onclick="removePhoto()">✕ Удалить фото</button>
+      <div style="font-size:12px;color:var(--hint);text-align:center;margin-top:10px;line-height:1.5">📌 После отправки бот попросит продублировать этот скриншот сообщением в чат — фото не передаётся автоматически вместе с заказом</div>
+
+      <div style="height:130px"></div>
+    </div>
+
+    <div class="buy-wrap">
+      <button class="buy-btn" id="submit-btn" onclick="submitOrder()" disabled>Прикрепи фото чека</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- PROFILE -->
+<div class="screen" id="screen-profile">
+  <div class="section-label" style="margin-top:20px">Мой аккаунт</div>
+  <div class="profile-wrap">
+    <div class="profile-hero">
+      <div class="avatar" id="avatar-text">?</div>
+      <div class="profile-name" id="profile-name">Загрузка...</div>
+      <div class="profile-username" id="profile-id"></div>
+    </div>
+    <div class="stat-grid">
+      <div class="stat-card"><div class="stat-val" id="stat-orders">0</div><div class="stat-lbl">Заказов</div></div>
+      <div class="stat-card"><div class="stat-val gold" id="stat-stars">0 ★</div><div class="stat-lbl">Куплено звёзд</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ORDERS -->
+<div class="screen" id="screen-orders">
+  <div class="section-label" style="margin-top:20px">История заказов</div>
+  <div class="orders-wrap" id="orders-list">
+    <div class="empty">
+      <div class="empty-icon">🌟</div>
+      <div class="empty-title">Заказов пока нет</div>
+      <div>Купи первые звёзды!</div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const tg = window.Telegram?.WebApp
+if(tg){tg.ready();tg.expand();tg.setHeaderColor('#0d0d14')}
+
+const PACKAGES = [
+  {stars:50,   price:13000,  badge:null,       badgeType:''},
+  {stars:100,  price:25000,  badge:'🔥 Хит',   badgeType:'hot'},
+  {stars:250,  price:60000,  badge:'-8%',       badgeType:'sale'},
+  {stars:500,  price:120000, badge:'-15%',      badgeType:'sale'},
+]
+
+const REQUISITES = {
+  card:     {rows:[
+    {label:'Номер карты', value:'5614 6821 1224 7798', copy:true},
+    {label:'Получатель',  value:'N.A.', copy:false},
+    {label:'Банк',        value:'Любой банк UZ', copy:false},
+  ]},
+  transfer: {rows:[
+    {label:'Номер карты', value:'5614 6821 1224 7798', copy:true},
+    {label:'Получатель',  value:'N.A.', copy:false},
+  ]},
+}
+
+let selectedPkg = null
+let selectedPay = 'card'
+let photoFile   = null
+let photoBase64 = null
+
+// Рендер пакетов
+const list = document.getElementById('pkg-list')
+PACKAGES.forEach(p => {
+  const el = document.createElement('div')
+  el.className = 'pkg-card'
+  el.dataset.stars = p.stars
+  el.innerHTML = `
+    <div class="pkg-icon">⭐</div>
+    <div class="pkg-info">
+      <div class="pkg-count"><span class="star-color">${p.stars}</span> звёзд</div>
+      <div class="pkg-price">${p.price.toLocaleString('ru')} сум</div>
+    </div>
+    ${p.badge ? `<div class="pkg-badge ${p.badgeType}">${p.badge}</div>` : ''}
+    <div class="pkg-radio"></div>
+  `
+  el.onclick = () => pickPkg(el, p)
+  list.appendChild(el)
+})
+
+function pickPkg(el, p) {
+  document.querySelectorAll('.pkg-card').forEach(c=>c.classList.remove('selected'))
+  el.classList.add('selected')
+  selectedPkg = p
+  const btn = document.getElementById('btn-next-pay')
+  btn.disabled = false
+  btn.textContent = `Купить ${p.stars} ★ — ${p.price.toLocaleString('ru')} сум`
+  if(tg) tg.HapticFeedback?.selectionChanged()
+}
+
+function goToPayStep() {
+  if(!selectedPkg) return
+  document.getElementById('step-pkg').style.display='none'
+  document.getElementById('step-pay').style.display='block'
+}
+
+function goToReceiptStep() {
+  document.getElementById('step-pay').style.display='none'
+  document.getElementById('step-receipt').style.display='block'
+
+  // Summary
+  document.getElementById('order-summary-block').innerHTML = `
+    <div>
+      <div class="os-stars"><span>${selectedPkg.stars}</span> звёзд</div>
+      <div class="os-price">К оплате</div>
+    </div>
+    <div class="os-badge">${selectedPkg.price.toLocaleString('ru')} сум</div>
+  `
+
+  // Реквизиты
+  const rows = REQUISITES[selectedPay]?.rows || []
+  const html = `
+    <div class="req-title">Реквизиты для оплаты</div>
+    ${rows.map(r=>`
+      <div class="req-row">
+        <span class="req-label">${r.label}</span>
+        <span class="req-value ${r.copy?'copy-btn':''}" ${r.copy?`onclick="copyText('${r.value}')"`:''}>${r.value}${r.copy?' 📋':''}</span>
+      </div>
+    `).join('')}
+  `
+  document.getElementById('requisites-card').innerHTML = html
+}
+
+function goBack(showId, hideId) {
+  document.getElementById(hideId).style.display='none'
+  document.getElementById(showId).style.display='block'
+}
+
+function selPay(el, method) {
+  document.querySelectorAll('.pay-method').forEach(m=>m.classList.remove('selected'))
+  el.classList.add('selected')
+  selectedPay = method
+  if(tg) tg.HapticFeedback?.selectionChanged()
+}
+
+// Фото чека
+function triggerUpload() {
+  if(!photoFile) document.getElementById('photo-input').click()
+}
+
+function handlePhoto(input) {
+  const file = input.files[0]
+  if(!file) return
+  photoFile = file
+  const reader = new FileReader()
+  reader.onload = e => {
+    photoBase64 = e.target.result
+    const preview = document.getElementById('photo-preview')
+    preview.src = photoBase64
+    preview.style.display = 'block'
+    document.getElementById('upload-placeholder').style.display = 'none'
+    document.getElementById('upload-area').classList.add('has-photo')
+    document.getElementById('photo-remove-btn').style.display = 'block'
+    document.getElementById('submit-btn').disabled = false
+    document.getElementById('submit-btn').textContent = '✅ Отправить на проверку'
+    if(tg) tg.HapticFeedback?.notificationOccurred('success')
+  }
+  reader.readAsDataURL(file)
+}
+ 
+function removePhoto() {
+  photoFile = null
+  photoBase64 = null
+  document.getElementById('photo-preview').style.display = 'none'
+  document.getElementById('photo-preview').src = ''
+  document.getElementById('upload-placeholder').style.display = 'block'
+  document.getElementById('upload-area').classList.remove('has-photo')
+  document.getElementById('photo-remove-btn').style.display = 'none'
+  document.getElementById('photo-input').value = ''
+  document.getElementById('submit-btn').disabled = true
+  document.getElementById('submit-btn').textContent = 'Прикрепи фото чека'
+}
+ 
+function submitOrder() {
+  if(!photoFile && !photoBase64) { showToast('📷 Прикрепи фото чека'); return }
+ 
+  // Важно: tg.sendData() закрывает Mini App сразу после вызова,
+  // поэтому весь визуальный отклик (тост, смена экрана, сброс формы)
+  // должен произойти ДО отправки, а не после — иначе он может просто не успеть показаться
+  const data = {
+    stars: selectedPkg.stars,
+    price: selectedPkg.price,
+    pay_method: selectedPay,
+  }
+ 
+  showToast('✅ Заказ отправлен на проверку!')
+  if(tg) tg.HapticFeedback?.notificationOccurred('success')
+ 
+  addDemoOrder()
+  showScreen('orders')
+ 
+  // reset
+  document.getElementById('step-receipt').style.display='none'
+  document.getElementById('step-pkg').style.display='block'
+  removePhoto()
+  selectedPkg = null
+  document.getElementById('btn-next-pay').disabled = true
+  document.getElementById('btn-next-pay').textContent = 'Выбери пакет'
+  document.querySelectorAll('.pkg-card').forEach(c=>c.classList.remove('selected'))
+ 
+  // sendData — последним шагом, т.к. Telegram может закрыть Mini App сразу после вызова
+  setTimeout(()=>{
+    if(tg) tg.sendData(JSON.stringify(data))
+  }, 1200)
+}
+ 
+function copyText(txt) {
+  navigator.clipboard?.writeText(txt).then(()=>showToast('📋 Скопировано!'))
+  if(tg) tg.HapticFeedback?.selectionChanged()
+}
+ 
+// Profile
+function loadProfile() {
+  const user = tg?.initDataUnsafe?.user
+  const name = user ? [user.first_name,user.last_name].filter(Boolean).join(' ') : 'Пользователь'
+  const username = user?.username ? '@'+user.username : 'Demo режим'
+  document.getElementById('profile-name').textContent = name
+  document.getElementById('profile-id').textContent = username
+  document.getElementById('avatar-text').textContent = name[0]||'?'
+  document.getElementById('stat-orders').textContent = orders.length
+  document.getElementById('stat-stars').textContent = orders.filter(o=>o.status==='done').reduce((s,o)=>s+o.stars,0)+' ★'
+}
+ 
+// Orders
+const orders = []
+const statusLabel = {done:'Выполнен',pending:'Ожидает',checking:'Проверка',rejected:'Отклонён'}
+ 
+function addDemoOrder() {
+  if(!selectedPkg) return
+  orders.unshift({stars:selectedPkg?.stars||100, price:selectedPkg?.price||25000, status:'checking', date:new Date()})
+  renderOrders()
+}
+ 
+function renderOrders() {
+  const el = document.getElementById('orders-list')
+  if(!orders.length){
+    el.innerHTML='<div class="empty"><div class="empty-icon">🌟</div><div class="empty-title">Заказов пока нет</div><div>Купи первые звёзды!</div></div>'
+    return
+  }
+  el.innerHTML = orders.map(o=>`
+    <div class="order-card">
+      <div class="order-left">
+        <div class="order-stars"><span>${o.stars}</span> звёзд</div>
+        <div class="order-date">${o.date.toLocaleDateString('ru',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}</div>
+      </div>
+      <div style="text-align:right">
+        <div class="order-price">${o.price.toLocaleString('ru')} сум</div>
+        <div class="badge ${o.status}">${statusLabel[o.status]}</div>
+      </div>
+    </div>
+  `).join('')
+  }
+
+  // Nav
+function showScreen(name) {
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'))
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'))
+  document.getElementById('screen-'+name).classList.add('active')
+  document.getElementById('nav-'+name).classList.add('active')
+  if(name==='profile') loadProfile()
+  if(name==='orders') renderOrders()
+  if(tg) tg.HapticFeedback?.selectionChanged()
+}
+ 
+// Toast
+function showToast(msg) {
+  const t = document.getElementById('toast')
+  t.textContent = msg
+  t.classList.add('show')
+  setTimeout(()=>t.classList.remove('show'),2500)
+}
+</script>
+</body>
+</html>

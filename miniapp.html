@@ -16,14 +16,11 @@
   --accent:#9d6eff;
   --accent2:#6c35e0;
   --gold:#fcc84a;
-  --gold2:#e8a700;
   --green:#3ecf8e;
   --red:#f06b6b;
   --border:rgba(255,255,255,0.07);
 }
 body{background:var(--bg);color:var(--text);font-family:-apple-system,'SF Pro Display','Segoe UI',sans-serif;min-height:100vh;overflow-x:hidden}
-
-/* NAV */
 .nav{display:flex;background:rgba(13,13,20,0.95);border-top:1px solid var(--border);position:fixed;bottom:0;left:0;right:0;z-index:100;backdrop-filter:blur(12px);padding-bottom:env(safe-area-inset-bottom)}
 .nav-btn{flex:1;padding:10px 8px 8px;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;border:none;background:none;color:var(--hint);font-size:10px;font-weight:500;transition:color .2s;position:relative}
 .nav-btn svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;transition:transform .2s}
@@ -31,23 +28,15 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,'SF Pro Di
 .nav-btn.active svg{transform:scale(1.1)}
 .nav-dot{width:4px;height:4px;border-radius:50%;background:var(--accent);position:absolute;top:6px;right:calc(50% - 14px);display:none}
 .nav-btn.active .nav-dot{display:block}
-
-/* SCREENS */
 .screen{display:none;padding:0 0 90px}
 .screen.active{display:block}
-
-/* HERO */
 .hero{padding:28px 20px 20px;position:relative;overflow:hidden}
 .hero-glow{position:absolute;top:-60px;left:50%;transform:translateX(-50%);width:280px;height:280px;background:radial-gradient(circle,rgba(157,110,255,0.18) 0%,transparent 70%);pointer-events:none}
 .hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(157,110,255,0.12);border:1px solid rgba(157,110,255,0.25);border-radius:20px;padding:5px 12px;font-size:12px;color:var(--accent);font-weight:500;margin-bottom:14px}
 .hero h1{font-size:26px;font-weight:800;letter-spacing:-.5px;line-height:1.2}
 .hero h1 span{background:linear-gradient(135deg,#fcc84a,#ff8c42);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .hero p{font-size:14px;color:var(--hint);margin-top:8px;line-height:1.5}
-
-/* SECTION LABEL */
 .section-label{font-size:11px;font-weight:700;letter-spacing:.1em;color:var(--hint);text-transform:uppercase;padding:0 20px;margin:20px 0 10px}
-
-/* PACKAGES */
 .packages{padding:0 16px;display:flex;flex-direction:column;gap:8px}
 .pkg-card{background:var(--bg2);border-radius:18px;padding:16px;display:flex;align-items:center;gap:14px;cursor:pointer;border:1.5px solid var(--border);transition:all .2s;position:relative;overflow:hidden}
 .pkg-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(157,110,255,0.06),transparent);opacity:0;transition:opacity .2s}
@@ -65,14 +54,10 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,'SF Pro Di
 .pkg-radio{width:22px;height:22px;border-radius:50%;border:2px solid rgba(255,255,255,0.15);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .2s}
 .pkg-card.selected .pkg-radio{border-color:var(--accent);background:var(--accent)}
 .pkg-card.selected .pkg-radio::after{content:'';width:8px;height:8px;background:#fff;border-radius:50%}
-
-/* BUY BUTTON */
 .buy-wrap{position:fixed;bottom:65px;left:0;right:0;padding:10px 16px;background:linear-gradient(to top,var(--bg) 55%,transparent);z-index:50}
 .buy-btn{width:100%;padding:16px;background:linear-gradient(135deg,var(--accent2),var(--accent));border:none;border-radius:16px;color:#fff;font-size:16px;font-weight:700;cursor:pointer;transition:all .15s;letter-spacing:-.1px}
 .buy-btn:active{transform:scale(0.97);opacity:.9}
 .buy-btn:disabled{opacity:.35;pointer-events:none}
-
-/* PAY SCREEN */
 .pay-screen-wrap{padding:0 16px}
 .pay-methods{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
 .pay-method{background:var(--bg2);border-radius:16px;padding:14px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;border:1.5px solid var(--border);transition:all .2s}
@@ -84,8 +69,6 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,'SF Pro Di
 .pay-check{margin-left:auto;width:22px;height:22px;border-radius:50%;border:2px solid rgba(255,255,255,0.15);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .2s}
 .pay-method.selected .pay-check{border-color:var(--accent);background:var(--accent)}
 .pay-method.selected .pay-check::after{content:'';width:8px;height:8px;background:#fff;border-radius:50%}
-
-/* RECEIPT */
 .receipt-wrap{padding:0 16px}
 .req-card{background:var(--bg2);border-radius:18px;padding:18px;margin-bottom:12px;border:1px solid var(--border)}
 .req-card .req-title{font-size:12px;font-weight:700;letter-spacing:.06em;color:var(--hint);text-transform:uppercase;margin-bottom:14px}
@@ -93,9 +76,7 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,'SF Pro Di
 .req-row:last-child{border-bottom:none}
 .req-label{font-size:13px;color:var(--hint)}
 .req-value{font-size:14px;font-weight:600;text-align:right}
-.req-value.highlight{color:var(--gold)}
 .req-value.copy-btn{color:var(--accent);cursor:pointer;text-decoration:underline;text-underline-offset:2px}
-
 .upload-area{background:var(--bg2);border:2px dashed rgba(157,110,255,0.3);border-radius:18px;padding:28px 20px;text-align:center;cursor:pointer;transition:all .2s;margin-bottom:8px;position:relative;overflow:hidden}
 .upload-area:active{border-color:var(--accent);background:rgba(157,110,255,0.06)}
 .upload-area.has-photo{border-style:solid;border-color:var(--accent)}
@@ -105,23 +86,15 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,'SF Pro Di
 .upload-preview{width:100%;max-height:220px;object-fit:cover;border-radius:12px;display:none}
 .upload-input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
 .photo-remove{display:none;margin-top:10px;background:rgba(240,107,107,0.15);border:1px solid rgba(240,107,107,0.3);color:var(--red);border-radius:10px;padding:8px 16px;font-size:13px;font-weight:600;cursor:pointer;width:100%}
-
-/* ORDER SUMMARY */
 .order-summary{background:linear-gradient(135deg,rgba(157,110,255,0.1),rgba(108,53,224,0.08));border:1px solid rgba(157,110,255,0.2);border-radius:16px;padding:16px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between}
 .order-summary .os-stars{font-size:22px;font-weight:800}
 .order-summary .os-stars span{color:var(--gold)}
 .order-summary .os-price{font-size:14px;color:var(--hint);margin-top:3px}
 .order-summary .os-badge{background:rgba(157,110,255,0.2);border-radius:10px;padding:8px 14px;font-size:13px;font-weight:700;color:var(--accent)}
-
-/* STEPS */
 .steps-wrap{padding:16px 20px 4px;display:flex;gap:5px}
 .step-bar{height:3px;flex:1;border-radius:2px;background:rgba(255,255,255,0.08);transition:background .3s}
 .step-bar.active{background:linear-gradient(90deg,var(--accent2),var(--accent))}
-
-/* BACK */
 .back-btn{background:none;border:none;color:var(--accent);font-size:14px;font-weight:600;cursor:pointer;padding:14px 20px 6px;display:flex;align-items:center;gap:5px}
-
-/* PROFILE */
 .profile-wrap{padding:0 16px}
 .profile-hero{background:var(--bg2);border-radius:20px;padding:22px;text-align:center;margin-bottom:12px;border:1px solid var(--border);position:relative;overflow:hidden}
 .profile-hero::before{content:'';position:absolute;top:-40px;left:50%;transform:translateX(-50%);width:200px;height:200px;background:radial-gradient(circle,rgba(157,110,255,0.15) 0%,transparent 70%);pointer-events:none}
@@ -133,8 +106,6 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,'SF Pro Di
 .stat-val{font-size:22px;font-weight:800}
 .stat-val.gold{color:var(--gold)}
 .stat-lbl{font-size:12px;color:var(--hint);margin-top:4px}
-
-/* ORDERS */
 .orders-wrap{padding:0 16px}
 .order-card{background:var(--bg2);border-radius:16px;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;border:1px solid var(--border)}
 .order-left .order-stars{font-size:16px;font-weight:700}
@@ -146,41 +117,14 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,'SF Pro Di
 .badge.pending{background:rgba(252,200,74,0.12);color:var(--gold)}
 .badge.checking{background:rgba(157,110,255,0.12);color:var(--accent)}
 .badge.rejected{background:rgba(240,107,107,0.12);color:var(--red)}
-
-/* EMPTY */
 .empty{text-align:center;padding:50px 20px;color:var(--hint);font-size:14px}
 .empty-icon{font-size:52px;margin-bottom:14px}
 .empty-title{font-size:16px;font-weight:600;color:var(--text);margin-bottom:6px}
-
-/* TOAST */
 .toast{position:fixed;top:16px;left:50%;transform:translateX(-50%) translateY(-80px);background:var(--bg3);color:var(--text);padding:12px 20px;border-radius:14px;font-size:14px;font-weight:500;z-index:999;transition:transform .35s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;border:1px solid var(--border);box-shadow:0 8px 32px rgba(0,0,0,.4)}
 .toast.show{transform:translateX(-50%) translateY(0)}
-
-/* LOADING */
 .loading-overlay{position:fixed;inset:0;background:rgba(13,13,20,0.8);display:flex;align-items:center;justify-content:center;z-index:500;backdrop-filter:blur(4px)}
 .loading-spinner{width:36px;height:36px;border:3px solid rgba(157,110,255,0.2);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-
-/* ADMIN */
-.admin-badge{background:rgba(240,107,107,0.12);border:1px solid rgba(240,107,107,0.25);border-radius:8px;padding:4px 10px;font-size:11px;color:var(--red);font-weight:700;display:inline-block;margin-left:8px}
-.admin-order-card{background:var(--bg2);border-radius:16px;padding:14px 16px;margin-bottom:8px;border:1px solid var(--border)}
-.admin-order-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
-.admin-order-user{font-size:13px;color:var(--hint)}
-.admin-order-info{font-size:15px;font-weight:700}
-.admin-order-info span{color:var(--gold)}
-.admin-actions{display:flex;gap:6px;margin-top:10px}
-.admin-btn{flex:1;padding:8px;border:none;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;transition:all .15s}
-.admin-btn:active{transform:scale(0.96)}
-.admin-btn.approve{background:rgba(62,207,142,0.15);color:var(--green);border:1px solid rgba(62,207,142,0.25)}
-.admin-btn.reject{background:rgba(240,107,107,0.12);color:var(--red);border:1px solid rgba(240,107,107,0.2)}
-.admin-btn.view-photo{background:rgba(157,110,255,0.12);color:var(--accent);border:1px solid rgba(157,110,255,0.2)}
-.photo-modal{position:fixed;inset:0;background:rgba(0,0,0,0.9);z-index:900;display:none;align-items:center;justify-content:center;flex-direction:column;gap:16px}
-.photo-modal.show{display:flex}
-.photo-modal img{max-width:90vw;max-height:75vh;border-radius:12px;object-fit:contain}
-.photo-modal-close{background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:10px 24px;border-radius:12px;font-size:14px;font-weight:600;cursor:pointer}
-.tabs{display:flex;gap:6px;padding:0 16px;margin-bottom:4px}
-.tab{flex:1;padding:9px;background:var(--bg2);border:1px solid var(--border);border-radius:12px;font-size:13px;font-weight:600;color:var(--hint);cursor:pointer;text-align:center;transition:all .2s}
-.tab.active{background:rgba(157,110,255,0.12);border-color:var(--accent);color:var(--accent)}
 </style>
 </head>
 <body>
@@ -203,7 +147,6 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,'SF Pro Di
   </button>
 </nav>
 
-<!-- SHOP -->
 <div class="screen active" id="screen-shop">
   <div id="step-pkg">
     <div class="hero">
@@ -236,7 +179,6 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,'SF Pro Di
           <div><div class="pay-name">Перевод на карту</div><div class="pay-sub">Любой банк Узбекистана</div></div>
           <div class="pay-check"></div>
         </div>
-
       </div>
     </div>
     <div class="buy-wrap">
@@ -269,7 +211,6 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,'SF Pro Di
   </div>
 </div>
 
-<!-- PROFILE -->
 <div class="screen" id="screen-profile">
   <div class="section-label" style="margin-top:20px">Мой аккаунт</div>
   <div class="profile-wrap">
@@ -285,26 +226,9 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,'SF Pro Di
   </div>
 </div>
 
-<!-- ORDERS -->
 <div class="screen" id="screen-orders">
-  <div style="display:flex;align-items:center;padding:20px 20px 0">
-    <span class="section-label" style="margin:0;padding:0">История заказов</span>
-    <span class="admin-badge" id="admin-badge" style="display:none">ADMIN</span>
-  </div>
-  <!-- Tabs (only for admin) -->
-  <div class="tabs" id="admin-tabs" style="display:none;margin-top:12px">
-    <div class="tab active" onclick="switchTab('my')" id="tab-my">Мои заказы</div>
-    <div class="tab" onclick="switchTab('all')" id="tab-all">Все заказы</div>
-  </div>
-  <div class="orders-wrap" style="margin-top:12px" id="orders-list">
-    <div class="empty"><div class="empty-icon">🌟</div><div class="empty-title">Загружаем заказы...</div></div>
-  </div>
-</div>
-
-<!-- PHOTO MODAL -->
-<div class="photo-modal" id="photo-modal">
-  <img id="modal-photo-img" src="">
-  <button class="photo-modal-close" onclick="closePhotoModal()">✕ Закрыть</button>
+  <div class="section-label" style="margin-top:20px">История заказов</div>
+  <div class="orders-wrap" id="orders-list"></div>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -312,38 +236,24 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,'SF Pro Di
 
 <script>
 // ================================================
-// НАСТРОЙКИ — ЗАМЕНИ СВОИМИ ДАННЫМИ
-// ================================================
-
-// 1. Твой Telegram user_id (чтобы видеть все заказы как администратор)
-//    Узнать свой ID: написать @userinfobot в Telegram
-const ADMIN_ID = '1345458533'
-
-// 2. JSONBin.io — бесплатное хранилище для заказов
-//    Шаги: зайди на jsonbin.io → Register → Create Bin → вставь [] → скопируй BIN_ID
-//    Потом: Account → API Keys → создай ключ → скопируй сюда
-const JSONBIN_BIN_ID = '6a35073ada38895dfedc753e'
-const JSONBIN_API_KEY = '$2a$10$MO.vugrp5R3WNjUKKEvlBOgbjEy46ZSJGNUn4kFRwY/n5PvFKlxTW'
-
+const BOT_TOKEN = '8860806339:AAHtBrRE29rhjgTrM5IH8XHK7F36elsnE5Q'
+const ADMIN_ID  = '1345458533'
+const STORAGE_KEY = 'stars_orders_v2'
 // ================================================
 
 const tg = window.Telegram?.WebApp
 if(tg){tg.ready();tg.expand();tg.setHeaderColor('#0d0d14')}
 
 const tgUser = tg?.initDataUnsafe?.user
-const currentUserId = tgUser?.id ? String(tgUser.id) : 'demo_' + Math.random().toString(36).substr(2,8)
-const currentUserName = tgUser ? [tgUser.first_name, tgUser.last_name].filter(Boolean).join(' ') : 'Demo User'
-const currentUsername = tgUser?.username ? '@' + tgUser.username : null
-
-const isAdmin = String(currentUserId) === String(ADMIN_ID)
-let currentTab = 'my'
-let allOrders = []
+const currentUserId   = tgUser?.id ? String(tgUser.id) : 'demo'
+const currentUserName = tgUser ? [tgUser.first_name,tgUser.last_name].filter(Boolean).join(' ') : 'Demo User'
+const currentUsername = tgUser?.username ? '@'+tgUser.username : ''
 
 const PACKAGES = [
-  {stars:50,   price:13000,  badge:null,       badgeType:''},
-  {stars:100,  price:25000,  badge:'🔥 Хит',   badgeType:'hot'},
-  {stars:250,  price:60000,  badge:'-8%',       badgeType:'sale'},
-  {stars:500,  price:120000, badge:'-15%',      badgeType:'sale'},
+  {stars:50,   price:13000,  badge:null,      badgeType:''},
+  {stars:100,  price:25000,  badge:'🔥 Хит',  badgeType:'hot'},
+  {stars:250,  price:60000,  badge:'-8%',      badgeType:'sale'},
+  {stars:500,  price:120000, badge:'-15%',     badgeType:'sale'},
 ]
 
 const REQUISITES = {
@@ -356,52 +266,47 @@ const REQUISITES = {
     {label:'Номер карты', value:'5614 6821 1224 7798', copy:true},
     {label:'Получатель',  value:'N.A.', copy:false},
   ]},
-  usdt: {rows:[]},
+}
+  
+  const statusLabel = {done:'Выполнен',pending:'Ожидает',checking:'Проверка',rejected:'Отклонён'}
+const payLabel    = {card:'Click/Payme', transfer:'Перевод'}
+
+let selectedPkg  = null
+let selectedPay  = 'card'
+let photoFile    = null
+let photoBase64  = null
+
+// ── LocalStorage helpers ──
+function loadOrders() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]') } catch{ return [] }
+}
+function saveOrders(arr) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(arr))
 }
 
-let selectedPkg = null
-let selectedPay = 'card'
-let photoFile   = null
-let photoBase64 = null
-
-async function loadOrdersFromCloud() {
-  if(!JSONBIN_BIN_ID || JSONBIN_BIN_ID === 'ТВОЙ_BIN_ID') {
-    allOrders = JSON.parse(localStorage.getItem('stars_orders') || '[]')
-    return
-  }
-  try {
-    const r = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}/latest`, {
-      headers: {'X-Master-Key': JSONBIN_API_KEY, 'X-Bin-Meta': 'false'}
+// ── Send to Telegram bot ──
+async function sendToBot(text, photoB64) {
+  const api = `https://api.telegram.org/bot${BOT_TOKEN}`
+  if(photoB64) {
+    // convert base64 to blob
+    const res  = await fetch(photoB64)
+    const blob = await res.blob()
+    const form = new FormData()
+    form.append('chat_id', ADMIN_ID)
+    form.append('photo', blob, 'receipt.jpg')
+    form.append('caption', text)
+    form.append('parse_mode', 'HTML')
+    await fetch(`${api}/sendPhoto`, {method:'POST', body:form})
+  } else {
+    await fetch(`${api}/sendMessage`, {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({chat_id: ADMIN_ID, text, parse_mode:'HTML'})
     })
-    const data = await r.json()
-    allOrders = Array.isArray(data) ? data : []
-  } catch(e) {
-    console.error('Cloud load error:', e)
-    allOrders = JSON.parse(localStorage.getItem('stars_orders') || '[]')
   }
 }
 
-async function saveOrdersToCloud() {
-  if(!JSONBIN_BIN_ID || JSONBIN_BIN_ID === 'ТВОЙ_BIN_ID') {
-    localStorage.setItem('stars_orders', JSON.stringify(allOrders))
-    return
-  }
-  try {
-    await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Master-Key': JSONBIN_API_KEY
-      },
-      body: JSON.stringify(allOrders)
-    })
-    localStorage.setItem('stars_orders', JSON.stringify(allOrders))
-  } catch(e) {
-    console.error('Cloud save error:', e)
-    localStorage.setItem('stars_orders', JSON.stringify(allOrders))
-  }
-}
-
+// ── Render packages ──
 const list = document.getElementById('pkg-list')
 PACKAGES.forEach(p => {
   const el = document.createElement('div')
@@ -481,7 +386,7 @@ function handlePhoto(input) {
   const url = URL.createObjectURL(file)
   img.onload = () => {
     const canvas = document.createElement('canvas')
-    const maxW = 800, maxH = 800
+    const maxW = 1000, maxH = 1000
     let w = img.width, h = img.height
     if(w > maxW || h > maxH) {
       if(w/h > maxW/maxH) { h = Math.round(h*maxW/w); w = maxW }
@@ -489,9 +394,9 @@ function handlePhoto(input) {
     }
     canvas.width = w; canvas.height = h
     canvas.getContext('2d').drawImage(img, 0, 0, w, h)
-    photoBase64 = canvas.toDataURL('image/jpeg', 0.7)
+    photoBase64 = canvas.toDataURL('image/jpeg', 0.8)
     URL.revokeObjectURL(url)
-const preview = document.getElementById('photo-preview')
+    const preview = document.getElementById('photo-preview')
     preview.src = photoBase64
     preview.style.display = 'block'
     document.getElementById('upload-placeholder').style.display = 'none'
@@ -518,34 +423,40 @@ function removePhoto() {
 
 async function submitOrder() {
   if(!photoBase64) { showToast('📷 Прикрепи фото чека'); return }
-
   showLoading(true)
+
+  const orderId = Date.now().toString()
   const newOrder = {
-    id: Date.now().toString(),
+    id: orderId,
     userId: currentUserId,
-    userName: currentUserName,
-    userUsername: currentUsername,
     stars: selectedPkg.stars,
     price: selectedPkg.price,
     payMethod: selectedPay,
-    photo: photoBase64,
     status: 'checking',
     date: new Date().toISOString()
   }
 
-  await loadOrdersFromCloud()
-  allOrders.unshift(newOrder)
-  await saveOrdersToCloud()
+  // Сохраняем локально
+  const orders = loadOrders()
+  orders.unshift(newOrder)
+  saveOrders(orders)
+
+  // Отправляем боту
+  const msg = `🆕 <b>Новый заказ!</b>\n\n` +
+    `👤 Клиент: ${currentUserName} ${currentUsername}\n` +
+    `🆔 ID: ${currentUserId}\n` +
+    `⭐ Звёзд: ${selectedPkg.stars}\n` +
+    `💰 Сумма: ${selectedPkg.price.toLocaleString('ru')} сум\n` +
+    `💳 Оплата: ${payLabel[selectedPay]}\n` +
+    `🔖 Заказ #${orderId}`
+
+  try {
+    await sendToBot(msg, photoBase64)
+  } catch(e) {
+    console.error('Bot send error:', e)
+  }
+
   showLoading(false)
-
-  if(tg) tg.sendData(JSON.stringify({
-    stars: newOrder.stars,
-    price: newOrder.price,
-    pay_method: newOrder.payMethod,
-    user: currentUserName,
-    order_id: newOrder.id
-  }))
-
   showToast('✅ Заказ отправлен на проверку!')
   if(tg) tg.HapticFeedback?.notificationOccurred('success')
 
@@ -561,124 +472,48 @@ async function submitOrder() {
   }, 1200)
 }
 
-async function updateOrderStatus(orderId, newStatus) {
-  showLoading(true)
-  await loadOrdersFromCloud()
-  const idx = allOrders.findIndex(o => o.id === orderId)
-  if(idx !== -1) allOrders[idx].status = newStatus
-  await saveOrdersToCloud()
-  showLoading(false)
-  renderOrders()
-  showToast(newStatus === 'done' ? '✅ Заказ выполнен!' : '❌ Заказ отклонён')
-}
-
-function viewPhoto(orderId) {
-  const order = allOrders.find(o => o.id === orderId)
-  if(!order || !order.photo) { showToast('Фото недоступно'); return }
-  document.getElementById('modal-photo-img').src = order.photo
-  document.getElementById('photo-modal').classList.add('show')
-}
-
-function closePhotoModal() {
-  document.getElementById('photo-modal').classList.remove('show')
-  document.getElementById('modal-photo-img').src = ''
-}
-
-function switchTab(tab) {
-  currentTab = tab
-  document.getElementById('tab-my').classList.toggle('active', tab === 'my')
-  document.getElementById('tab-all').classList.toggle('active', tab === 'all')
-  renderOrders()
-}
-
-const statusLabel = {done:'Выполнен',pending:'Ожидает',checking:'Проверка',rejected:'Отклонён'}
-const payLabel = {card:'Click/Payme',transfer:'Перевод',usdt:'USDT/TON'}
-
 function renderOrders() {
   const el = document.getElementById('orders-list')
-  let filtered
-  if(isAdmin && currentTab === 'all') {
-    filtered = allOrders
-  } else {
-    filtered = allOrders.filter(o => o.userId === currentUserId)
-  }
-  if(!filtered.length) {
-    el.innerHTML = `<div class="empty"><div class="empty-icon">🌟</div><div class="empty-title">${isAdmin && currentTab==='all' ? 'Заказов пока нет' : 'Заказов пока нет'}</div><div>${isAdmin && currentTab==='all' ? 'Ждём первых клиентов!' : 'Купи первые звёзды!'}</div></div>`
+  const orders = loadOrders().filter(o => o.userId === currentUserId)
+  if(!orders.length) {
+    el.innerHTML = `<div class="empty"><div class="empty-icon">🌟</div><div class="empty-title">Заказов пока нет</div><div>Купи первые звёзды!</div></div>`
     return
   }
-  if(isAdmin && currentTab === 'all') {
-    el.innerHTML = filtered.map(o => {
-      const d = new Date(o.date)
-      const dateStr = d.toLocaleDateString('ru',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})
-      return `
-        <div class="admin-order-card">
-          <div class="admin-order-header">
-            <div>
-              <div class="admin-order-info"><span>${o.stars}</span> звёзд</div>
-              <div class="admin-order-user">👤 ${o.userName}${o.userUsername ? ' ' + o.userUsername : ''}</div>
-            </div>
-            <div class="badge ${o.status}">${statusLabel[o.status]}</div>
-          </div>
-          <div style="font-size:12px;color:var(--hint);margin-bottom:8px">
-            💰 ${o.price?.toLocaleString('ru')} сум · ${payLabel[o.payMethod]||o.payMethod} · ${dateStr}
-          </div>
-          <div class="admin-actions">
-            ${o.photo ? `<button class="admin-btn view-photo" onclick="viewPhoto('${o.id}')">📷 Чек</button>` : ''}
-            ${o.status !== 'done' ? `<button class="admin-btn approve" onclick="updateOrderStatus('${o.id}','done')">✅ Выполнен</button>` : ''}
-            ${o.status !== 'rejected' ? `<button class="admin-btn reject" onclick="updateOrderStatus('${o.id}','rejected')">❌ Отклонить</button>` : ''}
-          </div>
+  el.innerHTML = orders.map(o => {
+    const d = new Date(o.date)
+    const dateStr = d.toLocaleDateString('ru',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})
+    return `
+      <div class="order-card">
+        <div class="order-left">
+          <div class="order-stars"><span>${o.stars}</span> звёзд</div>
+          <div class="order-date">${dateStr}</div>
         </div>
-      `
-    }).join('')
-  } else {
-    el.innerHTML = filtered.map(o => {
-      const d = new Date(o.date)
-      const dateStr = d.toLocaleDateString('ru',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})
-      return `
-        <div class="order-card">
-          <div class="order-left">
-            <div class="order-stars"><span>${o.stars}</span> звёзд</div>
-            <div class="order-date">${dateStr}</div>
-          </div>
-          <div style="text-align:right">
-            <div class="order-price">${o.price?.toLocaleString('ru')} сум</div>
-            <div class="badge ${o.status}">${statusLabel[o.status]}</div>
-          </div>
+        <div style="text-align:right">
+          <div class="order-price">${o.price?.toLocaleString('ru')} сум</div>
+          <div class="badge ${o.status}">${statusLabel[o.status]}</div>
         </div>
-      `
-    }).join('')
-  }
+      </div>
+    `
+  }).join('')
 }
 
 function loadProfile() {
   document.getElementById('profile-name').textContent = currentUserName
   document.getElementById('profile-id').textContent = currentUsername || `ID: ${currentUserId}`
   document.getElementById('avatar-text').textContent = currentUserName[0] || '?'
-  const myOrders = allOrders.filter(o => o.userId === currentUserId)
-  document.getElementById('stat-orders').textContent = myOrders.length
-  document.getElementById('stat-stars').textContent = myOrders.filter(o=>o.status==='done').reduce((s,o)=>s+o.stars,0)+' ★'
+  const orders = loadOrders().filter(o => o.userId === currentUserId)
+  document.getElementById('stat-orders').textContent = orders.length
+  document.getElementById('stat-stars').textContent = orders.filter(o=>o.status==='done').reduce((s,o)=>s+o.stars,0)+' ★'
 }
 
-async function showScreen(name) {
+function showScreen(name) {
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'))
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'))
   document.getElementById('screen-'+name).classList.add('active')
   document.getElementById('nav-'+name).classList.add('active')
+  if(name==='orders') renderOrders()
+  if(name==='profile') loadProfile()
   if(tg) tg.HapticFeedback?.selectionChanged()
-
-  if(name === 'orders' || name === 'profile') {
-    showLoading(true)
-    await loadOrdersFromCloud()
-    showLoading(false)
-    if(name === 'orders') {
-      if(isAdmin) {
-        document.getElementById('admin-badge').style.display = 'inline-block'
-        document.getElementById('admin-tabs').style.display = 'flex'
-      }
-      renderOrders()
-    }
-    if(name === 'profile') loadProfile()
-  }
 }
 
 function showLoading(show) {
@@ -697,9 +532,8 @@ function copyText(txt) {
   if(tg) tg.HapticFeedback?.selectionChanged()
 }
 
-document.getElementById('photo-modal').addEventListener('click', function(e) {
-  if(e.target === this) closePhotoModal()
-})
+// Init
+renderOrders()
 </script>
 </body>
 </html>

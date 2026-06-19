@@ -150,3 +150,15 @@ bot.catch((err) => console.error('Ошибка бота:', err))
 
 bot.start()
 console.log('Бот запущен')
+
+// Маленький HTTP-сервер — нужен только для Render: бесплатный тариф
+// "усыпляет" сервис без HTTP-запросов, поэтому сюда будет стучаться
+// внешний пинг-сервис (UptimeRobot), чтобы бот не засыпал
+const http = require('http')
+const PORT = process.env.PORT || 3000
+http
+  .createServer((req, res) => {
+    res.writeHead(200, { 'Content-Type': 'text/plain' })
+    res.end('Бот работает')
+  })
+  .listen(PORT, () => console.log(`Keep-alive сервер слушает порт ${PORT}`))

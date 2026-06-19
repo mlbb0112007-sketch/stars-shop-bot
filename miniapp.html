@@ -8,17 +8,9 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 :root{
-  --bg:#0d0d14;
-  --bg2:#16161f;
-  --bg3:#1e1e2a;
-  --text:#f0f0f8;
-  --hint:#6b6b85;
-  --accent:#9d6eff;
-  --accent2:#6c35e0;
-  --gold:#fcc84a;
-  --green:#3ecf8e;
-  --red:#f06b6b;
-  --border:rgba(255,255,255,0.07);
+  --bg:#0d0d14;--bg2:#16161f;--bg3:#1e1e2a;--text:#f0f0f8;--hint:#6b6b85;
+  --accent:#9d6eff;--accent2:#6c35e0;--gold:#fcc84a;--green:#3ecf8e;
+  --red:#f06b6b;--border:rgba(255,255,255,0.07);
 }
 body{background:var(--bg);color:var(--text);font-family:-apple-system,'SF Pro Display','Segoe UI',sans-serif;min-height:100vh;overflow-x:hidden}
 .nav{display:flex;background:rgba(13,13,20,0.95);border-top:1px solid var(--border);position:fixed;bottom:0;left:0;right:0;z-index:100;backdrop-filter:blur(12px);padding-bottom:env(safe-area-inset-bottom)}
@@ -107,10 +99,12 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,'SF Pro Di
 .stat-val.gold{color:var(--gold)}
 .stat-lbl{font-size:12px;color:var(--hint);margin-top:4px}
 .orders-wrap{padding:0 16px}
-.order-card{background:var(--bg2);border-radius:16px;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;border:1px solid var(--border)}
+.order-card{background:var(--bg2);border-radius:16px;padding:14px 16px;margin-bottom:8px;border:1px solid var(--border)}
+.order-top{display:flex;align-items:center;justify-content:space-between}
 .order-left .order-stars{font-size:16px;font-weight:700}
 .order-left .order-stars span{color:var(--gold)}
 .order-left .order-date{font-size:12px;color:var(--hint);margin-top:3px}
+.order-left .order-user{font-size:12px;color:var(--hint);margin-top:2px}
 .order-price{font-size:13px;color:var(--hint);margin-bottom:5px;text-align:right}
 .badge{font-size:11px;font-weight:700;padding:4px 10px;border-radius:8px}
 .badge.done{background:rgba(62,207,142,0.12);color:var(--green)}
@@ -125,6 +119,15 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,'SF Pro Di
 .loading-overlay{position:fixed;inset:0;background:rgba(13,13,20,0.8);display:flex;align-items:center;justify-content:center;z-index:500;backdrop-filter:blur(4px)}
 .loading-spinner{width:36px;height:36px;border:3px solid rgba(157,110,255,0.2);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
+.admin-badge{background:rgba(240,107,107,0.12);border:1px solid rgba(240,107,107,0.25);border-radius:8px;padding:4px 10px;font-size:11px;color:var(--red);font-weight:700;display:inline-block;margin-left:8px}
+.tabs{display:flex;gap:6px;padding:0 16px;margin-bottom:4px}
+.tab{flex:1;padding:9px;background:var(--bg2);border:1px solid var(--border);border-radius:12px;font-size:13px;font-weight:600;color:var(--hint);cursor:pointer;text-align:center;transition:all .2s}
+.tab.active{background:rgba(157,110,255,0.12);border-color:var(--accent);color:var(--accent)}
+.admin-actions{display:flex;gap:6px;margin-top:10px}
+.admin-btn{flex:1;padding:8px;border:none;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;transition:all .15s}
+.admin-btn:active{transform:scale(0.96)}
+.admin-btn.approve{background:rgba(62,207,142,0.15);color:var(--green);border:1px solid rgba(62,207,142,0.25)}
+.admin-btn.reject{background:rgba(240,107,107,0.12);color:var(--red);border:1px solid rgba(240,107,107,0.2)}
 </style>
 </head>
 <body>
@@ -162,7 +165,6 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,'SF Pro Di
       <button class="buy-btn" id="btn-next-pay" onclick="goToPayStep()" disabled>Выбери пакет</button>
     </div>
   </div>
-
   <div id="step-pay" style="display:none">
     <button class="back-btn" onclick="goBack('step-pkg','step-pay')">← Назад</button>
     <div class="steps-wrap"><div class="step-bar active"></div><div class="step-bar active"></div><div class="step-bar"></div></div>
@@ -185,7 +187,6 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,'SF Pro Di
       <button class="buy-btn" onclick="goToReceiptStep()">Далее — ввести чек →</button>
     </div>
   </div>
-
   <div id="step-receipt" style="display:none">
     <button class="back-btn" onclick="goBack('step-pay','step-receipt')">← Назад</button>
     <div class="steps-wrap"><div class="step-bar active"></div><div class="step-bar active"></div><div class="step-bar active"></div></div>
@@ -200,7 +201,7 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,'SF Pro Di
           <div class="upload-icon">📷</div>
           <div class="upload-title">Прикрепить скриншот</div>
           <div class="upload-sub">Нажми чтобы выбрать фото чека</div>
-        </div>
+          </div>
       </div>
       <button class="photo-remove" id="photo-remove-btn" onclick="removePhoto()">✕ Удалить фото</button>
       <div style="height:130px"></div>
@@ -227,18 +228,40 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,'SF Pro Di
 </div>
 
 <div class="screen" id="screen-orders">
-  <div class="section-label" style="margin-top:20px">История заказов</div>
-  <div class="orders-wrap" id="orders-list"></div>
+  <div style="display:flex;align-items:center;padding:20px 20px 0">
+    <span class="section-label" style="margin:0;padding:0">История заказов</span>
+    <span class="admin-badge" id="admin-badge" style="display:none">ADMIN</span>
+  </div>
+  <div class="tabs" id="admin-tabs" style="display:none;margin-top:12px">
+    <div class="tab active" onclick="switchTab('my')" id="tab-my">Мои заказы</div>
+    <div class="tab" onclick="switchTab('all')" id="tab-all">Все заказы</div>
+  </div>
+  <div class="orders-wrap" style="margin-top:12px" id="orders-list">
+    <div class="empty"><div class="empty-icon">🌟</div><div class="empty-title">Загружаем...</div></div>
+  </div>
 </div>
 
 <div class="toast" id="toast"></div>
 <div class="loading-overlay" id="loading" style="display:none"><div class="loading-spinner"></div></div>
 
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+
 <script>
 // ================================================
 const BOT_TOKEN = '8860806339:AAHtBrRE29rhjgTrM5IH8XHK7F36elsnE5Q'
 const ADMIN_ID  = '1345458533'
-const STORAGE_KEY = 'stars_orders_v2'
+
+firebase.initializeApp({
+  apiKey: "AIzaSyB0rt8PSL7YxEA1s0qXXrdbQ-9b3DQpnUo",
+  authDomain: "stars-shop.firebaseapp.com",
+  projectId: "stars-shop",
+  storageBucket: "stars-shop.firebasestorage.app",
+  messagingSenderId: "954554347934",
+  appId: "1:954554347934:web:d50b190914c8c4129a668f"
+})
+const db = firebase.firestore()
 // ================================================
 
 const tg = window.Telegram?.WebApp
@@ -248,6 +271,7 @@ const tgUser = tg?.initDataUnsafe?.user
 const currentUserId   = tgUser?.id ? String(tgUser.id) : 'demo'
 const currentUserName = tgUser ? [tgUser.first_name,tgUser.last_name].filter(Boolean).join(' ') : 'Demo User'
 const currentUsername = tgUser?.username ? '@'+tgUser.username : ''
+const isAdmin = currentUserId === ADMIN_ID
 
 const PACKAGES = [
   {stars:50,   price:13000,  badge:null,      badgeType:''},
@@ -267,28 +291,39 @@ const REQUISITES = {
     {label:'Получатель',  value:'N.A.', copy:false},
   ]},
 }
-  
-  const statusLabel = {done:'Выполнен',pending:'Ожидает',checking:'Проверка',rejected:'Отклонён'}
+
+const statusLabel = {done:'Выполнен',pending:'Ожидает',checking:'Проверка',rejected:'Отклонён'}
 const payLabel    = {card:'Click/Payme', transfer:'Перевод'}
 
 let selectedPkg  = null
 let selectedPay  = 'card'
 let photoFile    = null
 let photoBase64  = null
+let currentTab   = 'my'
 
-// ── LocalStorage helpers ──
-function loadOrders() {
-  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]') } catch{ return [] }
-}
-function saveOrders(arr) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(arr))
+// ── Firebase ──
+async function saveOrder(order) {
+  await db.collection('orders').add(order)
 }
 
-// ── Send to Telegram bot ──
+async function loadMyOrders() {
+  const snap = await db.collection('orders').where('userId','==',currentUserId).orderBy('date','desc').get()
+  return snap.docs.map(d => ({...d.data(), _id: d.id}))
+}
+
+async function loadAllOrders() {
+  const snap = await db.collection('orders').orderBy('date','desc').get()
+  return snap.docs.map(d => ({...d.data(), _id: d.id}))
+}
+
+async function updateStatus(docId, newStatus) {
+  await db.collection('orders').doc(docId).update({status: newStatus})
+}
+
+// ── Bot ──
 async function sendToBot(text, photoB64) {
   const api = `https://api.telegram.org/bot${BOT_TOKEN}`
   if(photoB64) {
-    // convert base64 to blob
     const res  = await fetch(photoB64)
     const blob = await res.blob()
     const form = new FormData()
@@ -429,6 +464,8 @@ async function submitOrder() {
   const newOrder = {
     id: orderId,
     userId: currentUserId,
+    userName: currentUserName,
+    userUsername: currentUsername,
     stars: selectedPkg.stars,
     price: selectedPkg.price,
     payMethod: selectedPay,
@@ -436,25 +473,18 @@ async function submitOrder() {
     date: new Date().toISOString()
   }
 
-  // Сохраняем локально
-  const orders = loadOrders()
-  orders.unshift(newOrder)
-  saveOrders(orders)
-
-  // Отправляем боту
-  const msg = `🆕 <b>Новый заказ!</b>\n\n` +
-    `👤 Клиент: ${currentUserName} ${currentUsername}\n` +
-    `🆔 ID: ${currentUserId}\n` +
-    `⭐ Звёзд: ${selectedPkg.stars}\n` +
-    `💰 Сумма: ${selectedPkg.price.toLocaleString('ru')} сум\n` +
-    `💳 Оплата: ${payLabel[selectedPay]}\n` +
-    `🔖 Заказ #${orderId}`
-
   try {
-    await sendToBot(msg, photoBase64)
+    await saveOrder(newOrder)
   } catch(e) {
-    console.error('Bot send error:', e)
+    console.error('Firestore error:', e)
+    showToast('❌ Ошибка сохранения')
+    showLoading(false)
+    return
   }
+
+  const msg = `🆕 <b>Новый заказ!</b>\n\n👤 Клиент: ${currentUserName} ${currentUsername}\n🆔 ID: ${currentUserId}\n⭐ Звёзд: ${selectedPkg.stars}\n💰 Сумма: ${selectedPkg.price.toLocaleString('ru')} сум\n💳 Оплата: ${payLabel[selectedPay]}\n🔖 Заказ #${orderId}`
+
+  try { await sendToBot(msg, photoBase64) } catch(e) { console.error(e) }
 
   showLoading(false)
   showToast('✅ Заказ отправлен на проверку!')
@@ -472,38 +502,72 @@ async function submitOrder() {
   }, 1200)
 }
 
-function renderOrders() {
+async function changeStatus(docId, newStatus) {
+  showLoading(true)
+  try {
+    await updateStatus(docId, newStatus)
+    showToast(newStatus === 'done' ? '✅ Заказ выполнен!' : '❌ Заказ отклонён')
+    await renderOrders()
+  } catch(e) {
+    showToast('❌ Ошибка: ' + e.message)
+  }
+  showLoading(false)
+}
+
+function switchTab(tab) {
+  currentTab = tab
+  document.getElementById('tab-my').classList.toggle('active', tab==='my')
+  document.getElementById('tab-all').classList.toggle('active', tab==='all')
+  renderOrders()
+}
+
+async function renderOrders() {
   const el = document.getElementById('orders-list')
-  const orders = loadOrders().filter(o => o.userId === currentUserId)
+  el.innerHTML = `<div class="empty"><div class="empty-icon">⏳</div><div class="empty-title">Загружаем...</div></div>`
+  let orders = []
+  try {
+    orders = (isAdmin && currentTab === 'all') ? await loadAllOrders() : await loadMyOrders()
+  } catch(e) {
+    el.innerHTML = `<div class="empty"><div class="empty-icon">❌</div><div class="empty-title">Ошибка загрузки</div><div>${e.message}</div></div>`
+    return
+  }
   if(!orders.length) {
-    el.innerHTML = `<div class="empty"><div class="empty-icon">🌟</div><div class="empty-title">Заказов пока нет</div><div>Купи первые звёзды!</div></div>`
+    el.innerHTML = `<div class="empty"><div class="empty-icon">🌟</div><div class="empty-title">Заказов пока нет</div><div>${isAdmin && currentTab==='all' ? 'Ждём первых клиентов!' : 'Купи первые звёзды!'}</div></div>`
     return
   }
   el.innerHTML = orders.map(o => {
     const d = new Date(o.date)
     const dateStr = d.toLocaleDateString('ru',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})
-    return `
-      <div class="order-card">
+    const adminBtns = isAdmin ? `<div class="admin-actions">
+      ${o.status !== 'done' ? `<button class="admin-btn approve" onclick="changeStatus('${o._id}','done')">✅ Выполнен</button>` : ''}
+      ${o.status !== 'rejected' ? `<button class="admin-btn reject" onclick="changeStatus('${o._id}','rejected')">❌ Отклонить</button>` : ''}
+    </div>` : ''
+    return `<div class="order-card">
+      <div class="order-top">
         <div class="order-left">
           <div class="order-stars"><span>${o.stars}</span> звёзд</div>
           <div class="order-date">${dateStr}</div>
+          ${isAdmin && currentTab==='all' ? `<div class="order-user">👤 ${o.userName} ${o.userUsername||''}</div>` : ''}
         </div>
         <div style="text-align:right">
           <div class="order-price">${o.price?.toLocaleString('ru')} сум</div>
           <div class="badge ${o.status}">${statusLabel[o.status]}</div>
         </div>
       </div>
-    `
+      ${adminBtns}
+    </div>`
   }).join('')
 }
 
-function loadProfile() {
+async function loadProfile() {
   document.getElementById('profile-name').textContent = currentUserName
   document.getElementById('profile-id').textContent = currentUsername || `ID: ${currentUserId}`
   document.getElementById('avatar-text').textContent = currentUserName[0] || '?'
-  const orders = loadOrders().filter(o => o.userId === currentUserId)
-  document.getElementById('stat-orders').textContent = orders.length
-  document.getElementById('stat-stars').textContent = orders.filter(o=>o.status==='done').reduce((s,o)=>s+o.stars,0)+' ★'
+  try {
+    const orders = await loadMyOrders()
+    document.getElementById('stat-orders').textContent = orders.length
+    document.getElementById('stat-stars').textContent = orders.filter(o=>o.status==='done').reduce((s,o)=>s+o.stars,0)+' ★'
+  } catch(e) {}
 }
 
 function showScreen(name) {
@@ -511,7 +575,13 @@ function showScreen(name) {
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'))
   document.getElementById('screen-'+name).classList.add('active')
   document.getElementById('nav-'+name).classList.add('active')
-  if(name==='orders') renderOrders()
+  if(name==='orders') {
+    if(isAdmin) {
+      document.getElementById('admin-badge').style.display = 'inline-block'
+      document.getElementById('admin-tabs').style.display = 'flex'
+    }
+    renderOrders()
+  }
   if(name==='profile') loadProfile()
   if(tg) tg.HapticFeedback?.selectionChanged()
 }
@@ -533,6 +603,7 @@ function copyText(txt) {
 }
 
 // Init
+if(isAdmin) document.getElementById('admin-badge').style.display = 'inline-block'
 renderOrders()
 </script>
 </body>

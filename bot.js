@@ -16,7 +16,7 @@ const bot = new Bot(BOT_TOKEN)
 // поменяй и здесь, чтобы текст в /start не разъезжался с магазином
 const PACKAGES = [
   { stars: 50, price: 13000, badge: null },
-  { stars: 100, price: 25000, badge: '🔥' },
+  { stars: 100, price: 24000, badge: '🔥' },
   { stars: 250, price: 60000, badge: '-8%' },
   { stars: 500, price: 120000, badge: '-15%' },
 ]
